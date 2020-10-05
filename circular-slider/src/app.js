@@ -1,2 +1,6 @@
-// declaring the constants and updating the values here,
-// also setting the colors and the variables
+// declaring the constants container, updateVal and variables
+
+const container = "slider";
+
+
+//updating the values
