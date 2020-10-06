@@ -3,7 +3,100 @@ body {
     font-family: Helvetica, sans-serif;
  }
   
-/* Specifying the background of the container so we can see its dimensions.*/
+/* Specifying the background of the container so we can see its dimensions when styling.*/
 #container {
     background: #e3e3e4; 
  }
+
+  .clear:after, ul li:after {
+    content: ".";
+    display: block;
+    clear: both;
+    line-height: 0;
+  }
+
+  body {
+    font-family: Helvetica, sans-serif;
+    font-style: bold;
+  }
+  
+  /* Setting dimensions */
+  #container {
+    max-width: 1000px;
+    width: 100%;
+    background: #f6f6f6; 
+    padding-bottom: 10px;
+  }
+  
+  #row {
+    width: 33%;
+    padding-left: 3%;
+  }
+  
+  #row ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 50% 0 0 0;
+  }
+  
+  #row ul li span {
+    float: left;
+    display: block;
+  }
+  
+  
+  #row ul li span:last-child {
+    font-size: 105%;
+  }
+  
+  #row ul .amount {
+    width: 130px;
+    font-size: 50px;
+    font-weight: bold;
+  }
+  
+  #slider {
+    width: 50%;
+    height: 50%;
+  }
+  
+
+  #row ul li span.title {
+    width: auto;
+    height: auto;
+    display: block;
+    line-height: 22px;
+    margin-top: 17px;
+    margin-right: 0;
+  }
+  
+
+  /* Getting to the row name to add colored boxes. */
+  #row ul li span.title span {
+    width: 2vh;
+    height: 2vh;
+    text-indent: -100000px;
+    margin-right: 12px;
+    display: inline-block;
+  }
+  
+  #purple {
+    background: #4B0082;
+  }
+  
+  #blue {
+    background: #1E90FF;
+  }
+  
+  #green {
+    background: #228B22;
+  }
+  
+  #orange {
+    background: #FF8C00;
+  }
+  
+  #red {
+    background: #FF0000;
+  }
+  
