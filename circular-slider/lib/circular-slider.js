@@ -50,10 +50,10 @@ CircularSlider.prototype.CalculateNewPosition = function (angleRad) {
     };
 };
 
-
+// setting up namespace and basic dimensions
 const svg_namespace = "http://www.w3.org/2000/svg";
 const slider_width = 23;
-const handler_radius = (slider_width / 2);
+const handler_radius = (slider_width / 2) + 1;
 const tolerance = 46;
 
 /*
@@ -74,14 +74,17 @@ CircularSlider.prototype.Init = function () {
     this.InitEvents();
 }
 
+
+// SOME METHODS FOR CALCULATING AHEAD
 /*
 A method CalculateValue which takes in the degrees parameter and outputs 
 the value of a step.
 */ 
 CircularSlider.prototype.CalculateValueDegrees = function (degrees) {
+
     var range = this.options.max - this.options.min; // calculating the whole range
     var circleDegrees = 360;
-    var oneUnit = range / circleDegrees; // calculating the step
+    var oneUnit = range / circleDegrees; // calculating one unit
     var value = oneUnit * degrees;// calculating the step based on the input
 
     return value;
@@ -92,18 +95,19 @@ A method CalculateStepValue which takes in the value parameter and outputs a ste
 */ 
 CircularSlider.prototype.CalculateStepValue = function (value) {
     
-    var step = Math.round( value / this.options.step ) //here we need to round the step 
+    var step = Math.round( value / this.options.step ) // here we need to round the step for 
 
     return step;
 };
 
 /*
-A method CalculateDegreesStep which takes in the value parameter and outputs a step.
+A method CalculateDegreesStep which takes in the degrees parameter and outputs a step.
 */ 
 CircularSlider.prototype.CalculateDegreesStep = function (degrees) {
     
     var value = this.CalculateValueDegrees(degrees);
     var step = this.CalculateStepValue(value)
+
     return step;
 };
 
@@ -124,7 +128,7 @@ CircularSlider.prototype.CalculateStepRad = function (step) {
     return Math.round(degrees * Math.PI / 180 * 100) / 100;
 };
 
-// Calculates Radians from a given point
+// Calculates Radians from a given point TODO:
 CircularSlider.prototype.CalculateRadPoint = function (x, y) {
     return Math.atan2(x - this.centerX, -y - this.centerY);
 };
@@ -187,7 +191,7 @@ CircularSlider.prototype.PastZero = function (newPosition) {
  */
 
 CircularSlider.prototype.CurrentValue = function () {
-    return (this.currentStep * this.options.step) + this.options.min
+    return (this.currentStep * this.options.step) + this.options.min;
 }
 
 
@@ -202,12 +206,17 @@ CircularSlider.prototype.InitSlider = function () {
     // create root svg only when the first slider is added to the container.
     this.rootSVG = document.getElementById("sliderRootSVG");
     if (this.rootSVG === null) {
-        this.rootSVG = this.CreateRootSVG(this.container.offsetWidth);
+        this.rootSVG = this.CreateRootSVG(this.container.offsetWidth); // creates root
         this.container.appendChild(this.rootSVG);
     }
 
     this.slider = this.CreateSliderCircle(); //creating slider circle
     this.handle = this.CreateHandle(); //creating handle
+    this.clickCircle = this.CreateClickCircle(); // creating click circle
+
+    this.rootSVG.appendChild(this.CreatePathCircle());
+    this.rootSVG.appendChild(this.clickCircle);
+    this.rootSVG.appendChild(this.slider);
     this.rootSVG.appendChild(this.handle);
 };
 
@@ -215,6 +224,7 @@ CircularSlider.prototype.InitSlider = function () {
 Creating a root svg.
 */
 CircularSlider.prototype.CreateRootSVG = function (boxDimensions) {
+
     var svg = document.createElementNS(svg_namespace, "svg");
 
     svg.setAttributeNS(null, "id", "sliderRootSVG");
@@ -230,6 +240,7 @@ Transforming the coordinates here.
 */
 
 CircularSlider.prototype.TransformClientToLocalCoordinate = function (svgPoint, event) {
+
     svgPoint.x = event.clientX;
     svgPoint.y = event.clientY;
     // Creating variable transform, calling the getScreenCTM() function,
@@ -244,6 +255,16 @@ CircularSlider.prototype.TransformClientToLocalCoordinate = function (svgPoint, 
  */
 CircularSlider.prototype.CreateSliderCircle = function () {
     var slider = this.CreateCircle();
+
+    slider.setAttributeNS(null, 'class', 'top-slider');
+    slider.setAttributeNS(null, 'transform', 'rotate(-90)');
+    slider.setAttributeNS(null, 'stroke-dasharray', `${this.perimeter} ${this.perimeter}`);
+    slider.setAttributeNS(null, 'stroke-dashoffset', `${this.perimeter}`);
+
+    // creating a tray behind drag
+    slider.style.stroke = this.options.color;
+    slider.style.strokeWidth = slider_width;
+
     return slider;
 };
 
@@ -253,13 +274,27 @@ Creating the handle on which u can click.
 */
 CircularSlider.prototype.CreateClickCircle = function () {
     var slider = this.CreateCircle();
+
+    slider.style.strokeWidth = slider_width;
+    slider.style.stroke = "transparent";
+
     return slider;
 };
 
 /*
     For creating the underlying/background path circle.
- */
+*/
+
 CircularSlider.prototype.CreatePathCircle = function () {
+    var slider = this.CreateCircle();
+
+    slider.setAttributeNS(null, 'class', 'path-circle');
+    slider.setAttributeNS(null, 'transform', 'rotate(-90)');
+    slider.style.strokeWidth = slider_width;
+    slider.style.strokeDasharray = "6, 2";
+
+    return slider;
+
 };
 
 /* 
@@ -267,6 +302,12 @@ SVG: creates a circle.
 */
 CircularSlider.prototype.CreateCircle = function () {
     var slider = document.createElementNS(svg_namespace, 'circle');
+    
+    slider.setAttributeNS(null, "cx", this.centerX);
+    slider.setAttributeNS(null, "cy", this.centerY);
+    slider.setAttributeNS(null, "r", this.radius);
+    slider.setAttributeNS(null, "fill", "none");
+
     return slider;
 };
 
@@ -281,7 +322,7 @@ CircularSlider.prototype.CreateHandle = function () {
     handle.setAttributeNS(null, "cy", `${this.centerY - this.radius}`); // y coordinate
     handle.setAttributeNS(null, "r", `${handler_radius}`); // radius r
     handle.setAttributeNS(null, "class", "handle"); // setting the class
-
+    
     return handle;
 };
 
@@ -302,6 +343,9 @@ CircularSlider.prototype.InitEvents = function () {
     this.handle.addEventListener("mousedown", function (e) {
         this.StartDrag(e);
     }.bind(this));
+    this.clickCircle.addEventListener('click', function (e) {
+        this.HandleSliderClick(e);
+    }.bind(this));
 };
 
 CircularSlider.prototype.StartDrag = function (e) {
@@ -319,14 +363,14 @@ CircularSlider.prototype.HandleDrag = function (e) {
         return;
     }
     var svgPoint = this.rootSVG.createSVGPoint();
-    var localCoords = this.TransformClientToLocalCoordinate(svgPoint, e);
-    var mouseHandleOffsetX = this.position.x - localCoords.x;
-    var mouseHandleOffsetY = this.position.y - localCoords.y;
+    var localCoordinates = this.TransformClientToLocalCoordinate(svgPoint, e);
+    var mouseHandleOffsetX = this.position.x - localCoordinates.x;
+    var mouseHandleOffsetY = this.position.y - localCoordinates.y;
     
     if (mouseHandleOffsetX > tolerance || mouseHandleOffsetY > tolerance) {
         this.CancelDrag(e);
     } else {
-        var angelRadians = this.CalculateRadPoint(localCoords.x, localCoords.y);
+        var angelRadians = this.CalculateRadPoint(localCoordinates.x, localCoordinates.y);
         this.MoveSlider(angelRadians);
     }
 };
@@ -336,6 +380,7 @@ A method for cancelling the drag.
 */
 CircularSlider.prototype.CancelDrag = function (event) {
     event.preventDefault();
+
     // only complete step if you are currently moving
     if (this.dragging) {
         this.SetStep(this.CalculateStepValue(this.value));
@@ -344,17 +389,24 @@ CircularSlider.prototype.CancelDrag = function (event) {
 };
 
 /* 
-    A method to handle touches.
-    Also ignore multi-touch as per requirements.
+    A method to handle slider click.
 */
 
 CircularSlider.prototype.HandleSliderClick = function (e) {
+    var svgPoint = this.rootSVG.createSVGPoint();
+    var localCoordinates = this.TransformClientToLocalCoordinate(svgPoint, e);
+    var newPosition = this.CalculateNewPosition(this.CalculateRadPoint(localCoordinates.x, localCoordinates.y));
+    var nextStep = this.CalculateDegreesStep(newPosition.degrees);
+
+    this.SetStep(nextStep);
 };
 
+
 /* 
-    A method to handle touches for mobile.
+    A method to handle touches..
     Also ignore multi-touch as per requirements.
 */
 
 CircularSlider.prototype.TouchHandler = function (e) {
+    
 };

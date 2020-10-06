@@ -1,5 +1,5 @@
 
-// declaring the constants container, updateVal and variables
+// declaring the constants and container
 const container = "slider";
 const updateVal = (divId, val) => document.getElementById(divId).getElementsByClassName("amount")[0].innerHTML = "$" + val;
 

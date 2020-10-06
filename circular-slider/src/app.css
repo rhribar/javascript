@@ -1,0 +1,9 @@
+/* Specifying the font.*/
+body {
+    font-family: Helvetica, sans-serif;
+ }
+  
+/* Specifying the background of the container so we can see its dimensions.*/
+#container {
+    background: #e3e3e4; 
+ }

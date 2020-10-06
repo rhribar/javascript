@@ -1,4 +1,14 @@
+/* Setting the color of the handle here. */
 #sliderRootSVG circle.handle {
-    fill: #000;
+    fill: #eceded;
 }
 
+/* Setting the color of the path circle.*/
+#sliderRootSVG .path-circle {
+    stroke:#cccccd;
+}
+
+/* Setting opacity here so the path circle is visible.*/
+#sliderRootSVG .top-slider {
+    stroke-opacity: 0.7;
+}
