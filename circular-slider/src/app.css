@@ -1,30 +1,24 @@
 /* Specifying the font.*/
-body {
-    font-family: Helvetica, sans-serif;
- }
-  
-/* Specifying the background of the container so we can see its dimensions when styling.*/
-#container {
-    background: #e3e3e4; 
- }
 
-  .clear:after, ul li:after {
+    body {
+    font-family: Helvetica, sans-serif;
+    font-style: bold;
+  }
+
+
+  ul li:after {
     content: ".";
     display: block;
     clear: both;
     line-height: 0;
   }
 
-  body {
-    font-family: Helvetica, sans-serif;
-    font-style: bold;
-  }
-  
+
+  /* Specifying the background of the container so we can see its dimensions when styling.*/
   /* Setting dimensions */
   #container {
-    max-width: 1000px;
-    width: 100%;
-    background: #e0e1e2; 
+    max-width: 980px;
+    width: 80%;
     padding-bottom: 10px;
   }
   
@@ -56,18 +50,23 @@ body {
   }
   
   #slider {
-    width: 60%;
-    height: 60%;
+    width: 100%;
+    height: 100%;
   }
   
   #row ul li span.title {
     width: auto;
     height: auto;
     display: block;
-    line-height: 20px;
+    line-height: 25px;
     margin-top: 17px;
     margin-right: 0;
   }
+  
+  .same-line {
+    width: 60%;
+    float: left;
+}
   
 
   /* Getting to the row name to add colored boxes. */
@@ -101,7 +100,8 @@ body {
   
   #sliderStyling #tip {
     display: block;
-    text-align: left;
+    text-align: center;
     font-size: 18px;
     font-weight: bold;
+    font-style: italic;
   }

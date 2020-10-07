@@ -243,7 +243,7 @@ CircularSlider.prototype.CreateRootSVG = function (boxDimensions) {
     svg.setAttributeNS(null, "id", "sliderRootSVG");
     svg.setAttributeNS(null, "width", boxDimensions);
     svg.setAttributeNS(null, "height", boxDimensions);
-    svg.setAttributeNS(null, "viewBox", "-200 -200 400 400");
+    svg.setAttributeNS(null, "viewBox", "-200, -200, 400, 400");
 
     return svg;
 };
