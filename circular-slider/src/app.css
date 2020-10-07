@@ -24,7 +24,7 @@ body {
   #container {
     max-width: 1000px;
     width: 100%;
-    background: #f6f6f6; 
+    background: #e0e1e2; 
     padding-bottom: 10px;
   }
   
@@ -56,16 +56,15 @@ body {
   }
   
   #slider {
-    width: 50%;
-    height: 50%;
+    width: 60%;
+    height: 60%;
   }
   
-
   #row ul li span.title {
     width: auto;
     height: auto;
     display: block;
-    line-height: 22px;
+    line-height: 20px;
     margin-top: 17px;
     margin-right: 0;
   }
@@ -100,3 +99,9 @@ body {
     background: #FF0000;
   }
   
+  #sliderStyling #tip {
+    display: block;
+    text-align: left;
+    font-size: 18px;
+    font-weight: bold;
+  }

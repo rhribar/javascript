@@ -53,7 +53,7 @@ CircularSlider.prototype.CalculateNewPosition = function (angleRad) {
 // setting up namespace and basic dimensions
 const svg_namespace = "http://www.w3.org/2000/svg";
 const slider_width = 23;
-const handler_radius = (slider_width / 2) + 1;
+const handler_radius = (slider_width / 2)+2;
 const tolerance = 46;
 
 /*
@@ -71,7 +71,8 @@ CircularSlider.prototype.Init = function () {
     
     // we still need to initialize the slider
     this.InitSlider();
-    this.InitEvents();
+    this.InitMouseEvents();
+    this.InitTouchEvents();
 }
 
 
@@ -141,6 +142,7 @@ CircularSlider.prototype.SetStep = function (step) {
     var radiansEnd = this.CalculateStepRad(step);
     var newPosition = this.CalculateNewPosition(radiansEnd);
 
+    // animation for setting the step
     requestAnimationFrame(function () {
         this.slider.setAttributeNS(null, 'stroke-dashoffset', `${this.perimeter - newPosition.path}`);
         this.handle.style.transform = "rotate(" + newPosition.degrees + "deg)";
@@ -153,14 +155,14 @@ CircularSlider.prototype.UpdateState = function (newPosition, nextStep) {
     // checking if there was a change
     // update the step then
     if (this.currentStep !== nextStep && (this.options.changedValue && typeof(this.options.changedValue) === 'function')) {
-        
         this.currentStep = nextStep; 
         this.options.changedValue(this.CurrentValue());
-    } else {
-        this.value = this.CalculateValueDegrees(newPosition.degrees);
-        this.currentStep = nextStep;
-        this.position = newPosition;
     }
+
+    this.value = this.CalculateValueDegrees(newPosition.degrees);
+    this.currentStep = nextStep;
+    this.position = newPosition;
+
 };
 
 /* 
@@ -173,9 +175,19 @@ CircularSlider.prototype.MoveSlider = function (angleRad) {
     if (!this.PastZero(newPosition)) {
         return false;
     }
+
     // update the state here
     var nextStep = this.CalculateDegreesStep(newPosition.degrees);
     this.UpdateState(newPosition, nextStep);
+
+    this.slider.style.transition = "";
+    this.handle.style.transition = "";
+
+    // for animating the movement
+    requestAnimationFrame(function () {
+        this.slider.setAttributeNS(null, 'stroke-dashoffset', `${this.perimeter - newPosition.path}`);
+        this.handle.style.transform = "rotate(" + newPosition.degrees + "deg)";
+    }.bind(this));
 
 };
 
@@ -214,6 +226,7 @@ CircularSlider.prototype.InitSlider = function () {
     this.handle = this.CreateHandle(); //creating handle
     this.clickCircle = this.CreateClickCircle(); // creating click circle
 
+    // apending previous instances to rootSVG
     this.rootSVG.appendChild(this.CreatePathCircle());
     this.rootSVG.appendChild(this.clickCircle);
     this.rootSVG.appendChild(this.slider);
@@ -326,11 +339,13 @@ CircularSlider.prototype.CreateHandle = function () {
     return handle;
 };
 
-/* 
-    A method for creating events. Mobile + web here.
-*/
 
-CircularSlider.prototype.InitEvents = function () {
+/* Adding mouse events here.*/ 
+
+CircularSlider.prototype.InitMouseEvents = function () {
+    this.clickCircle.addEventListener('click', function (e) {
+        this.HandleSliderClick(e);
+    }.bind(this));
     this.container.addEventListener("mousemove", function (e) {
         this.HandleDrag(e);
     }.bind(this));
@@ -343,10 +358,29 @@ CircularSlider.prototype.InitEvents = function () {
     this.handle.addEventListener("mousedown", function (e) {
         this.StartDrag(e);
     }.bind(this));
-    this.clickCircle.addEventListener('click', function (e) {
+};
+
+/* Adding touch events here.*/ 
+
+CircularSlider.prototype.InitTouchEvents = function () {
+    this.slider.addEventListener('click', function (e) {
         this.HandleSliderClick(e);
     }.bind(this));
+    this.slider.addEventListener("touchend", function (e) {
+        this.TouchHandler(e);
+    }.bind(this));
+    this.slider.addEventListener("touchstart", function (e) {
+        this.TouchHandler(e);
+    }.bind(this));
+    this.handle.addEventListener("touchmove", function (e) {
+        this.TouchHandler(e);
+    }.bind(this));
+    this.container.addEventListener("touchcancel", function (e) {
+        this.TouchHandler(e);
+    }.bind(this));
 };
+
+
 
 CircularSlider.prototype.StartDrag = function (e) {
     e.preventDefault();
@@ -405,8 +439,12 @@ CircularSlider.prototype.HandleSliderClick = function (e) {
 /* 
     A method to handle touches..
     Also ignore multi-touch as per requirements.
+    TODO: comment here
 */
 
 CircularSlider.prototype.TouchHandler = function (e) {
+    var changes = e.changedTouches; // check list of touch points that changed
     
+    if (changes.length > 1) return; // Ignore multi touch here, we need only first touch
+    // if there are more than 1 touch, return false
 };

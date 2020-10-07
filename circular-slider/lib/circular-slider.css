@@ -1,6 +1,8 @@
 /* Setting the color of the handle here. */
 #sliderRootSVG circle.handle {
-    fill: #eceded;
+    fill: #ebecec;
+    stroke: #c3c3c3;
+    stroke-width: 1.5px;
 }
 
 /* Setting the color of the path circle.*/
