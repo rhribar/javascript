@@ -293,6 +293,9 @@ Creating the handle on which u can click.
 CircularSlider.prototype.CreateClickCircle = function () {
     var slider = this.CreateCircle();
 
+    slider.style.strokeWidth = slider_width;
+    slider.style.stroke = "transparent";
+
     return slider;
 };
 
@@ -362,9 +365,6 @@ CircularSlider.prototype.InitMouseEvents = function () {
     this.handle.addEventListener("mousedown", function (e) {
         this.StartDrag(e);
     }.bind(this));
-    this.slider.addEventListener('click', function (e) {
-        this.HandleSliderClick(e);
-    }.bind(this));
 };
 
 /* Adding touch events here.*/ 
@@ -409,6 +409,9 @@ CircularSlider.prototype.HandleDrag = function (e) {
     var localCoordinates = this.TransformClientToLocalCoordinate(svgPoint, e);
     var mouseHandleOffsetX = this.position.x - localCoordinates.x;
     var mouseHandleOffsetY = this.position.y - localCoordinates.y;
+
+    this.slider.style.transition = "";
+    this.handle.style.transition = "";
     
     if (mouseHandleOffsetX > tolerance || mouseHandleOffsetY > tolerance) {
         this.CancelDrag(e);
