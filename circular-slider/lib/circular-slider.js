@@ -419,7 +419,7 @@ CircularSlider.prototype.HandleDrag = function (e) {
         var angelRadians = this.CalculateRadPoint(localCoordinates.x, localCoordinates.y);
         this.MoveSlider(angelRadians);
     }
-};
+}
 
 /*
 A method for cancelling the drag.
