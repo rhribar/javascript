@@ -1,10 +1,10 @@
-/* Specifying the font.*/
-
-body {
+  /* Specifying the font here.*/
+  body {
     font-family: Helvetica, sans-serif;
     font-style: bold;
   }
-
+  
+  /* Adding the row on the same line here.*/
   ul li:after {
     content: ".";
     display: block;
@@ -12,37 +12,40 @@ body {
     line-height: 0;
   }
 
-  /* Specifying the background of the container so we can see its dimensions when styling.*/
-  /* Setting dimensions */
+  /* Setting container dimensions. */
   #container {
-    max-width: 980px;
+    max-width: 1080px;
     width: 80%;
     padding-bottom: 630px;
     background: rgb(200,201,203);
     background: linear-gradient(0deg, rgba(200,201,203,1) 0%, rgba(237,237,238,1) 35%); 
   }
   
+  /*Styling the row here.*/
   #row {
     width: 33%;
     padding-left: 3%;
   }
   
+  /* Styling the row ul here.*/
   #row ul {
     list-style-type: none;
     margin: 0;
     padding: 50% 0 0 0;
   }
   
+  /* Styling the row ul li span.*/
   #row ul li span {
     float: left;
     display: block;
   }
   
-  
+  /* Styling the text in the row here.*/
   #row ul li span:last-child {
     font-size: 105%;
   }
   
+  /* Styling the amount in the row here. */
   #row ul .amount {
     width: 130px;
     font-size: 50px;
@@ -54,6 +57,7 @@ body {
     height: 100%; 
   }
   
+  /* Styling the rows titles here. */
   #row ul li span.title {
     width: auto;
     height: auto;
@@ -63,13 +67,14 @@ body {
     margin-right: 0;
   }
   
+  /* Adding the components on the same line. */
   .same-line {
     width: 60%;
     float: left;
-}
+  }
   
 
-  /* Getting to the row name to add colored boxes. */
+  /* Add colored boxes. */
   #row ul li span.title span {
     width: 25px;
     height: 25px;
@@ -78,6 +83,7 @@ body {
     display: inline-block;
   }
   
+  /* Setting colors of boxes */
   #purple {
     background: #4B0082;
   }
@@ -97,7 +103,8 @@ body {
   #red {
     background: #FF0000;
   }
-  
+
+  /* Styling the sliders here.*/
   #sliderStyling #tip {
     display: block;
     text-align: center;
@@ -107,7 +114,8 @@ body {
   }
   
 
-/* A media query, adding a breakpoint at 640 px. */
+/* Adding a media query for 600 px. */
+/* More can be added.*/
 @media screen and (max-width: 600px) {
 
     #container {
