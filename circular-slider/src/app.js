@@ -9,7 +9,7 @@ const insurance = new CircularSlider({container, color: "#228B22", min: 0, max: 
 const entertainment = new CircularSlider({container, color: "#FF8C00", min: 0, max: 950, step: 50, radius: 100, changedValue: val => updateValue('entertainment', val)});
 const healthCare = new CircularSlider({ container, color: "#FF0000", min: 0, max: 950, step: 50, radius: 70, changedValue: val => updateValue('health-care', val)});
 
-//updating the values
+//updating the values, here callback was used !
 updateValue('transportation', transportation.CurrentValue());
 updateValue('food', food.CurrentValue());
 updateValue('insurance', insurance.CurrentValue());
@@ -17,3 +17,9 @@ updateValue('entertainment', entertainment.CurrentValue());
 updateValue('health-care', healthCare.CurrentValue());
 
 
+/* We want the slider to have preset values. */
+transportation.SetStep(8);
+food.SetStep(8);
+insurance.SetStep(7);
+entertainment.SetStep(6);
+healthCare.SetStep(5);

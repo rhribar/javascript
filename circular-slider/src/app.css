@@ -40,11 +40,7 @@
     display: block;
   }
   
-  /* Styling the text in the row here.*/
-  #row ul li span:last-child {
-    font-size: 105%;
-  }
-  
+
   /* Styling the amount in the row here. */
   #row ul .amount {
     width: 130px;
@@ -57,14 +53,17 @@
     height: 100%; 
   }
   
-  /* Styling the rows titles here. */
-  #row ul li span.title {
+  /* Styling the text in the row here.*/
+  /* PROBLEM: The path to this styling was really complicated and therefore
+     difficult to maintain and scale. This was fixed by giving it a name. */
+  .title {
     width: auto;
     height: auto;
     display: block;
     line-height: 25px;
     margin-top: 17px;
     margin-right: 0;
+    font-size: 105%;
   }
   
   /* Adding the components on the same line. */

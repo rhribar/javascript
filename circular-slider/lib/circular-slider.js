@@ -1,13 +1,13 @@
 // SECTION 1: SETTING UP THE CIRCULAR SLIDER
 /* 
-Creating the CircularSlider function and 
-passing in the options variables. 
+Creating the CircularSlider method and 
+passing in the options variable. 
 */
 function CircularSlider(options) {
 
     // declaring the constructor
-    this.options = {};
-    this.options.container = options.container;
+    this.options = {}; // declaring an empty object
+    this.options.container = options.container; // adding a container variable in options
     this.options.color = options.color;
     this.options.max = options.max;
     this.options.min = options.min;
@@ -24,12 +24,18 @@ function CircularSlider(options) {
 /* 
 Adding a method CalculateNewPosition to CircularSlider constructor.
 It calculates new position and the corresponding path the slider travels.
+
+With keyword "prototype" we add all properties and functions to the CircularSlider object.
+OBJECT name: CircularSlider
+Keyword: prototype
+Method name: CalculateNewPosition
+Input variable: angleRad
 */
 CircularSlider.prototype.CalculateNewPosition = function (angleRad) {
 
     //  calculating the x and y coordinates
     var xCoord = Math.sin(angleRad) * this.radius;
-    var yCoord = (-1) * (Math.cos(angleRad) * this.radius) ;
+    var yCoord = (-1) * (Math.cos(angleRad) * this.radius);
 
     // angle in radians must always be positive, add full circle 2PI = 360 deg.
     var radCorrection;
@@ -39,8 +45,9 @@ CircularSlider.prototype.CalculateNewPosition = function (angleRad) {
         radCorrection = angleRad;
     }
 
-    // calculate the path
+    // transform radians to degrees
     var angleDeg = radCorrection * 180.0 / Math.PI;
+    // calculate the path
     var path = this.radius * radCorrection;
 
     // return an array of variables for slider
@@ -56,11 +63,11 @@ CircularSlider.prototype.CalculateNewPosition = function (angleRad) {
 // setting up namespace and basic dimensions
 const svg_namespace = "http://www.w3.org/2000/svg";
 const slider_width = 23;
-const handler_radius = (slider_width / 2)+2;
-const tolerance = 46;
+const handler_radius = (slider_width / 2) + 2;
+const tolerance = 500;
 
 /*
- Calculates and creates (init) all the values for sliders.
+Calculates and creates (init) all values for sliders.
 */
 CircularSlider.prototype.Init = function () {
     this.centerX = 0;
@@ -100,7 +107,7 @@ A method CalculateStepValue which takes in the value parameter and outputs a ste
 */ 
 CircularSlider.prototype.CalculateStepValue = function (value) {
     
-    var step = Math.round( value / this.options.step ) // here we need to round the step for 
+    var step = Math.round( value / this.options.step ) // here we need to round the step for UI
 
     return step;
 };
@@ -124,7 +131,7 @@ CircularSlider.prototype.CalculateStepRad = function (step) {
     var adjustedVal = val - this.options.min;
     var range = this.options.max - this.options.min; // calculating the range
     var degrees;
-    if(this.options.max === val) {
+    if(this.options.max === val) { //TODO:
         degrees = 359.99;
     } else {
         degrees = (Math.round(adjustedVal * (360.0 / range))) % 360;
@@ -135,14 +142,14 @@ CircularSlider.prototype.CalculateStepRad = function (step) {
 // Calculates Radians from a given point coordinates.
 CircularSlider.prototype.CalculateRadPoint = function (x, y) {
     return Math.atan2(x - this.centerX, -y - this.centerY);
-};
+};//TODO:
 
 
 // SECTION 3: IMPLEMENTING CALCULATION LOGIC AND ADDING ANIMATIONS
 
 /*
  Setting a step of a drag.
- */
+*/
 CircularSlider.prototype.SetStep = function (step) {
     
     var radiansEnd = this.CalculateStepRad(step); // calculating the radians from input step
@@ -177,6 +184,7 @@ Moves the slider on the orbit.
 */
 CircularSlider.prototype.MoveSlider = function (angleRad) {
     var newPosition = this.CalculateNewPosition(angleRad); // calculating the position
+
     // we do not want to move past top zero point
     if (!this.PastZero(newPosition)) {
         return false;
@@ -203,8 +211,7 @@ CircularSlider.prototype.PastZero = function (newPosition) {
 
 /*
  Getting the current value, so we can update and display it later on UI.
- */
-
+*/
 CircularSlider.prototype.CurrentValue = function () {
     return (this.currentStep * this.options.step) + this.options.min;
 }
@@ -217,7 +224,7 @@ Adding a method InitSlider to CircularSlider constructor.
 Create a slider and slider background.
 */
 
-CircularSlider.prototype.InitSlider = function () {
+CircularSlider.prototype.InitSlider = function () { //TODO: WHAT DOES THIS EVEN DO?
     this.container = document.getElementById(this.options.container);
 
     // create root svg only when the first slider is added to the container.
@@ -243,7 +250,7 @@ Creating a root svg.
 */
 CircularSlider.prototype.CreateRootSVG = function (boxDimensions) {
 
-    var svg = document.createElementNS(svg_namespace, "svg");
+    var svg = document.createElementNS(svg_namespace, "svg"); //TODO:
 
     svg.setAttributeNS(null, "id", "sliderRootSVG");
     svg.setAttributeNS(null, "width", boxDimensions);
@@ -257,7 +264,7 @@ CircularSlider.prototype.CreateRootSVG = function (boxDimensions) {
 Transforming the coordinates here from client to local.
 */
 
-CircularSlider.prototype.TransformClientToLocalCoordinate = function (svgPoint, event) {
+CircularSlider.prototype.TransformClientToLocalCoordinate = function (svgPoint, event) { // TODO:
 
     svgPoint.x = event.clientX;
     svgPoint.y = event.clientY;
@@ -353,7 +360,7 @@ CircularSlider.prototype.InitMouseEvents = function () {
     this.clickCircle.addEventListener('click', function (e) {
         this.HandleSliderClick(e);
     }.bind(this));
-    this.container.addEventListener("mousemove", function (e) {
+    window.addEventListener("mousemove", function (e) {
         this.HandleDrag(e);
     }.bind(this));
     this.container.addEventListener("mouseup", function (e) {
@@ -416,10 +423,9 @@ CircularSlider.prototype.HandleDrag = function (e) {
     if (mouseHandleOffsetX > tolerance || mouseHandleOffsetY > tolerance) {
         this.CancelDrag(e);
     } else {
-        var angelRadians = this.CalculateRadPoint(localCoordinates.x, localCoordinates.y);
-        this.MoveSlider(angelRadians);
-    }
-}
+        var angleRadians = this.CalculateRadPoint(localCoordinates.x, localCoordinates.y);
+        this.MoveSlider(angleRadians);
+    }}
 
 /*
 A method for cancelling the drag.
@@ -449,15 +455,35 @@ CircularSlider.prototype.HandleSliderClick = function (e) {
 
 
 /* 
-    TODO: works in mozzila responsive design mode ?!
     A method to handle touches..
     Also ignore multi-touch as per requirements.
+    Works on mobile devices.
+    TODO: Error on "touchcancel"!
 */
 
 CircularSlider.prototype.TouchHandler = function (e) {
-    var changes = e.changedTouches; // check list of touch points that changed
-    
-    if (changes.length > 1) return; // Ignore multi touch here, we need only first touch
+    var touches = e.changedTouches; // check list of touch points that changed
+
+    // Ignore multi-touch
+    if (touches.length > 1) return; // Ignore multi touch here, we need only first touch
     // if there are more than 1 touch, return false
 
+    var touch = touches[0];
+    var events = ["touchstart", "touchmove", "touchend", "touchcancel"];
+    var mouseEvents = ["mousedown", "mousemove", "mouseup", "mouseleave"];
+    var ev = events.indexOf(e.type);
+
+    if (ev === -1) return;
+
+    var type = e.type === events[2] && this.lastTouchType === events[0] ? 'click' : mouseEvents[ev];
+    var simulatedEvent = document.createEvent("MouseEvent");
+    simulatedEvent.initMouseEvent(type, true, true, window, 1,
+        touch.screenX, touch.screenY, touch.clientX, touch.clientY, false, false, false, false, 0, null);
+
+    touch.target.dispatchEvent(simulatedEvent);
+    e.preventDefault();
+    this.lastTouchType = e.type;
+
 };
+
+window.CircularSlider = CircularSlider;
